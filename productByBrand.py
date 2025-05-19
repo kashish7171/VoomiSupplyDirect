@@ -765,35 +765,38 @@ def read_product_urls_from_file(filepath):
 if __name__ == "__main__":
     start = time.perf_counter() 
     catUrllist = [
-        "https://voomisupply.com/collections/carrier"
+        "https://voomisupply.com/collections/lg",
+        "https://voomisupply.com/collections/mitsubishi-electric",
+        "https://voomisupply.com/collections/pentair",
+        "https://voomisupply.com/collections/lennox",
+        "https://voomisupply.com/collections/milwaukee",
+        "https://voomisupply.com/collections/rheem"
     ]
     vendor_url = 'https://voomisupply.com/'
     domain = 'https://voomisupply.com'
     vendor_id = 10148
-    # try:
-        # driver = triggerSelenium(useVPN=False, checkIP=False)
-        # if driver:
-            # for cat_url in catUrllist:
-            #     product_urls = getAllProUrl(driver, cat_url)
-            #     if not product_urls:
-            #         logger.debug(f"No products found for {cat_url}.")
-            #     print(product_urls)
-            #     exit()
-            #     # Use multiprocessing to fetch data for all product URLs in parallel
-            #     logger.debug(f"Total {len(product_urls)} products found for {cat_url}.")
-            #     for product_url in product_urls:
-            #         fetch_product_data(driver, product_url, vendor_id)
+    try:
+        driver = triggerSelenium(useVPN=False, checkIP=False)
+        if driver:
+            for cat_url in catUrllist:
+                product_urls = getAllProUrl(driver, cat_url)
+                if not product_urls:
+                    logger.debug(f"No products found for {cat_url}.")
+                # Use multiprocessing to fetch data for all product URLs in parallel
+                logger.debug(f"Total {len(product_urls)} products found for {cat_url}.")
+                for product_url in product_urls:
+                    fetch_product_data(driver, product_url, vendor_id)
             
-    product_urls = read_product_urls_from_file("producturls.txt")
-    if not product_urls:
-        logger.debug("No products found in producturls.txt.")
-    else:
-        logger.debug(f"Total {len(product_urls)} products found in producturls.txt.")
-        for product_url in product_urls:
-            fetch_product_data(product_url, vendor_id)
+    # product_urls = read_product_urls_from_file("producturls.txt")
+    # if not product_urls:
+    #     logger.debug("No products found in producturls.txt.")
+    # else:
+    #     logger.debug(f"Total {len(product_urls)} products found in producturls.txt.")
+    #     for product_url in product_urls:
+    #         fetch_product_data(product_url, vendor_id)
 
-    # finally:
-        # if driver:
-        #     driver.quit()
+    finally:
+        if driver:
+            driver.quit()
     finish = time.perf_counter()
     logger.debug(f'Finished ThreadMain in {round(finish - start, 2)} second(s)')
